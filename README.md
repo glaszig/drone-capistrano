@@ -8,7 +8,7 @@ Drone plugin for deployment via Capistrano.
 ./drone-capistrano <<EOF
 {
     "repo": {
-        "clone_url": "git://github.com/drone/drone",
+        "clone_url": "git://github.com/glaszig/drone-capistrano",
         "full_name": "drone/drone",
         "owner": "drone",
         "name": "drone"
@@ -21,7 +21,7 @@ Drone plugin for deployment via Capistrano.
     },
     "workspace": {
         "root": "/drone/src",
-        "path": "/home/tboerger/Projects/golang/src/github.com/drone-plugins/drone-capistrano"
+        "path": "/home/glaszig/golang/src/github.com/glaszig/drone-capistrano"
     },
     "vargs": {
         "tasks": "production deploy"
@@ -36,16 +36,16 @@ Build the Docker container using `make`:
 
 ```
 make deps build
-docker build --rm=true -t plugins/drone-capistrano .
+docker build --rm=true -t glaszig/drone-capistrano .
 ```
 
 ### Example
 
 ```sh
-docker run -i plugins/drone-capistrano <<EOF
+docker run -i glaszig/drone-capistrano <<EOF
 {
     "repo": {
-        "clone_url": "git://github.com/drone/drone",
+        "clone_url": "git://github.com/glaszig/drone-capistrano",
         "full_name": "drone/drone",
         "owner": "drone",
         "name": "drone"
@@ -58,7 +58,7 @@ docker run -i plugins/drone-capistrano <<EOF
     },
     "workspace": {
         "root": "/drone/src",
-        "path": "/drone/src/github.com/drone/drone"
+        "path": "/home/glaszig/golang/src/github.com/glaszig/drone-capistrano"
     },
     "vargs": {
         "tasks": "production deploy"
