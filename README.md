@@ -1,4 +1,4 @@
-# drone-capistrano
+# drone-capistrano [![Build Status](https://travis-ci.org/glaszig/drone-capistrano.svg?branch=master)](https://travis-ci.org/glaszig/drone-capistrano) [![ImageLayers Size](https://img.shields.io/imagelayers/image-size/glaszig/drone-capistrano/latest.svg)](https://hub.docker.com/r/glaszig/drone-capistrano/)
 
 Drone plugin for deployment via Capistrano.
 
