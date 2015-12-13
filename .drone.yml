@@ -1,0 +1,8 @@
+plugin:
+  name: Capistrano
+  desc: Deploy software with Capistrano
+  type: publish
+  image: glaszig/drone-capistrano
+  labels:
+    - ruby
+    - capistrano
