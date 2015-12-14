@@ -37,7 +37,7 @@ func main() {
 		return
 	}
 
-	capistrano := exec.Command("capistrano", tasks...)
+	capistrano := exec.Command("cap", tasks...)
 
 	capistrano.Dir = workspace.Path
 	capistrano.Stderr = os.Stderr
