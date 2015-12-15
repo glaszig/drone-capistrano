@@ -43,7 +43,7 @@ func main() {
 	bundle.Stdout = os.Stdout
 	bundle.Run()
 
-	capistrano := exec.Command("cap", tasks...)
+	capistrano := exec.Command("bundle exec cap", tasks...)
 
 	capistrano.Dir = workspace.Path
 	capistrano.Stderr = os.Stderr
