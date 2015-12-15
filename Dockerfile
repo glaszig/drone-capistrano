@@ -12,6 +12,7 @@ RUN apk update && \
     git \
     ruby \
     ruby-dev && \
+  gem install --no-ri --no-rdoc bundler && \
   gem install --no-ri --no-rdoc capistrano && \
   rm -rf /var/cache/apk/*
 
