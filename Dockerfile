@@ -12,6 +12,7 @@ RUN apk update && \
     git \
     ruby && \
   gem install --no-ri --no-rdoc capistrano && \
+  gem install --no-ri --no-rdoc io-console && \
   rm -rf /var/cache/apk/*
 
 ADD drone-capistrano /bin/
