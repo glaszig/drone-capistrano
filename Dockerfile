@@ -10,7 +10,8 @@ RUN apk update && \
   apk add \
     ca-certificates \
     git \
-    ruby && \
+    ruby \
+    ruby-dev && \
   gem install --no-ri --no-rdoc capistrano && \
   gem install --no-ri --no-rdoc io-console && \
   rm -rf /var/cache/apk/*
