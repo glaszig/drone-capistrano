@@ -37,6 +37,12 @@ func main() {
 		return
 	}
 
+	bundle := exec.Command("bundle", "install")
+	bundle.Dir = workspace.Path
+	bundle.Stderr = os.Stderr
+	bundle.Stdout = os.Stdout
+	bundle.Run()
+
 	capistrano := exec.Command("cap", tasks...)
 
 	capistrano.Dir = workspace.Path
