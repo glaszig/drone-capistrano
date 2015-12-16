@@ -62,7 +62,7 @@ func main() {
 	}
 }
 
-func command(w drone.Workspace, cmd string, args ...string) {
+func command(w drone.Workspace, cmd string, args ...string) *exec.Cmd {
 	c := exec.Command(cmd, args...)
 	c.Dir = w.Path
 	c.Env = os.Environ()
