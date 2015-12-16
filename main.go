@@ -51,19 +51,10 @@ func main() {
 		return
 	}
 
-	bundle := exec.Command("bundle", "install")
-	bundle.Env = os.Environ()
-	bundle.Dir = workspace.Path
-	bundle.Stderr = os.Stderr
-	bundle.Stdout = os.Stdout
+	bundle := command(workspace, "bundle", "install")
 	bundle.Run()
 
-	capistrano := exec.Command("bundle exec cap", tasks...)
-	capistrano.Env = os.Environ()
-	capistrano.Dir = workspace.Path
-	capistrano.Stderr = os.Stderr
-	capistrano.Stdout = os.Stdout
-
+	capistrano := command(workspace, "bundle exec cap", tasks...)
 	if err := capistrano.Run(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -77,5 +68,5 @@ func command(w drone.Workspace, cmd string, args ...string) {
 	c.Env = os.Environ()
 	c.Stdout = os.Stdout
 	c.Stderr = os.Stderr
-	c.Run()
+	return c
 }
