@@ -10,6 +10,7 @@ RUN apk update && \
   apk add \
     ca-certificates \
     git \
+    openssh \
     ruby \
     ruby-dev && \
   gem install --no-ri --no-rdoc bundler && \
