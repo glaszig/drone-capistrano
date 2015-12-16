@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 	"os/exec"
+	"path"
 	"strings"
 
 	"github.com/drone/drone-go/drone"
@@ -11,8 +13,11 @@ import (
 )
 
 var (
-	build     string
-	buildDate string
+	build             string
+	buildDate         string
+	sshKeyPath        string = "/root/.ssh"
+	sshPrivateKeyPath string = path.Join(sshKeyPath, "id_rsa")
+	sshPublicKeyPath  string = path.Join(sshKeyPath, "id_rsa.pub")
 )
 
 func main() {
@@ -28,6 +33,17 @@ func main() {
 	plugin.Param("build", &build)
 	plugin.Param("vargs", &vargs)
 	plugin.MustParse()
+
+	fmt.Printf("Installing your deploy key to %s\n", sshKeyPath)
+	os.MkdirAll(sshKeyPath, 0700)
+	ioutil.WriteFile(sshPrivateKeyPath, []byte(workspace.Keys.Private), 0600)
+	ioutil.WriteFile(sshPublicKeyPath, []byte(workspace.Keys.Public), 0644)
+
+	fmt.Printf("Starting SSH agent\n")
+	command(workspace, "eval `ssh-agent -s`", sshPrivateKeyPath)
+
+	fmt.Printf("Adding deploy key to SSH agent\n")
+	command(workspace, "ssh-add", sshPrivateKeyPath)
 
 	tasks := strings.Fields(vargs.Tasks)
 
@@ -54,4 +70,12 @@ func main() {
 		os.Exit(1)
 		return
 	}
+}
+
+func command(w drone.Workspace, cmd string, args ...string) {
+	c := exec.Command(cmd, args...)
+	c.Dir = w.Path
+	c.Stdout = os.Stdout
+	c.Stderr = os.Stderr
+	c.Run()
 }
