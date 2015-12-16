@@ -39,11 +39,9 @@ func main() {
 	ioutil.WriteFile(sshPrivateKeyPath, []byte(workspace.Keys.Private), 0600)
 	ioutil.WriteFile(sshPublicKeyPath, []byte(workspace.Keys.Public), 0644)
 
-	fmt.Printf("Starting SSH agent\n")
-	command(workspace, "eval `ssh-agent -s`", sshPrivateKeyPath)
-
-	fmt.Printf("Adding deploy key to SSH agent\n")
-	command(workspace, "ssh-add", sshPrivateKeyPath)
+	// set private key to use with $GIT_SSH wrapper
+	os.Setenv("GIT_SSH", "/git_ssh.sh")
+	os.Setenv("GIT_SSH_KEY", sshPrivateKeyPath)
 
 	tasks := strings.Fields(vargs.Tasks)
 
@@ -54,13 +52,14 @@ func main() {
 	}
 
 	bundle := exec.Command("bundle", "install")
+	bundle.Env = os.Environ()
 	bundle.Dir = workspace.Path
 	bundle.Stderr = os.Stderr
 	bundle.Stdout = os.Stdout
 	bundle.Run()
 
-	capistrano := exec.Command("bundle exec cap", tasks...)
-
+	capistrano := exec.Command("cap", tasks...)
+	capistrano.Env = os.Environ()
 	capistrano.Dir = workspace.Path
 	capistrano.Stderr = os.Stderr
 	capistrano.Stdout = os.Stdout
@@ -75,6 +74,7 @@ func main() {
 func command(w drone.Workspace, cmd string, args ...string) {
 	c := exec.Command(cmd, args...)
 	c.Dir = w.Path
+	c.Env = os.Environ()
 	c.Stdout = os.Stdout
 	c.Stderr = os.Stderr
 	c.Run()

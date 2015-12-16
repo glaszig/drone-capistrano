@@ -17,6 +17,7 @@ RUN apk update && \
   gem install --no-ri --no-rdoc capistrano && \
   rm -rf /var/cache/apk/*
 
+ADD git_ssh.sh /
 ADD ssh_config /etc/ssh/
 ADD drone-capistrano /bin/
 ENTRYPOINT ["/bin/drone-capistrano"]
