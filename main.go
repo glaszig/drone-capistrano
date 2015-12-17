@@ -51,7 +51,7 @@ func main() {
 		return
 	}
 
-	bundle := command(workspace, "bundle", "install")
+	bundle := command(workspace, "bundle", "install --path build/bundle")
 	bundle.Run()
 
 	capistrano := command(workspace, "bundle exec cap", tasks...)
