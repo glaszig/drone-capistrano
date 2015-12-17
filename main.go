@@ -54,7 +54,8 @@ func main() {
 	bundle := command(workspace, "bundle", "install", "--path", "build/bundle")
 	bundle.Run()
 
-	capistrano := command(workspace, "bundle exec cap", tasks...)
+	bundler_args := append([]string{"exec", "cap"}, tasks...)
+	capistrano := command(workspace, "bundle", bundler_args...)
 	if err := capistrano.Run(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
