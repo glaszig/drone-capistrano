@@ -1,3 +1,4 @@
 Host *
   ForwardAgent yes
+  StrictHostKeyChecking no
   IdentityFile /root/.ssh/id_rsa
