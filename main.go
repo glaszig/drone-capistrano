@@ -56,7 +56,7 @@ func main() {
 		return
 	}
 
-  bundle := dw.bundle("install", "--path", "build/bundle")
+  bundle := dw.bundle("install")
   if err := bundle.Run(); err != nil {
     fmt.Println(err)
     os.Exit(1)
