@@ -45,6 +45,7 @@ func main() {
 	ioutil.WriteFile(sshPrivateKeyPath, []byte(workspace.Keys.Private), 0600)
 	ioutil.WriteFile(sshPublicKeyPath, []byte(workspace.Keys.Public), 0644)
 
+  os.Setenv("BUILD_PATH", workspace.Path)
 	os.Setenv("GIT_SSH_KEY", sshPrivateKeyPath)
 
 	tasks := strings.Fields(vargs.Tasks)
