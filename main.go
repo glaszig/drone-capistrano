@@ -20,6 +20,10 @@ var (
 	sshPublicKeyPath  string = path.Join(sshKeyPath, "id_rsa.pub")
 )
 
+type DeployWorkspace struct {
+  Workspace drone.Workspace
+}
+
 func main() {
 	fmt.Printf("Drone Capistrano Plugin built at %s\n", buildDate)
 
@@ -27,6 +31,8 @@ func main() {
 	repo := drone.Repo{}
 	build := drone.Build{}
 	vargs := Params{}
+
+  dw := DeployWorkspace{workspace}
 
 	plugin.Param("workspace", &workspace)
 	plugin.Param("repo", &repo)
@@ -39,8 +45,6 @@ func main() {
 	ioutil.WriteFile(sshPrivateKeyPath, []byte(workspace.Keys.Private), 0600)
 	ioutil.WriteFile(sshPublicKeyPath, []byte(workspace.Keys.Public), 0644)
 
-	// set private key to use with $GIT_SSH wrapper
-	os.Setenv("GIT_SSH", "/git_ssh.sh")
 	os.Setenv("GIT_SSH_KEY", sshPrivateKeyPath)
 
 	tasks := strings.Fields(vargs.Tasks)
@@ -51,11 +55,14 @@ func main() {
 		return
 	}
 
-	bundle := command(workspace, "bundle", "install", "--path", "build/bundle")
-	bundle.Run()
+  bundle := dw.bundle("install", "--path", "build/bundle")
+  if err := bundle.Run(); err != nil {
+    fmt.Println(err)
+    os.Exit(1)
+    return
+  }
 
-	bundler_args := append([]string{"exec", "cap"}, tasks...)
-	capistrano := command(workspace, "bundle", bundler_args...)
+  capistrano := dw.cap(tasks...)
 	if err := capistrano.Run(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -70,4 +77,22 @@ func command(w drone.Workspace, cmd string, args ...string) *exec.Cmd {
 	c.Stdout = os.Stdout
 	c.Stderr = os.Stderr
 	return c
+}
+
+func (w *DeployWorkspace) cap(tasks ...string) *exec.Cmd {
+  args := append([]string{"cap"}, tasks...)
+  return w.bundle(args...)
+}
+
+func (w *DeployWorkspace) bundle(args ...string) *exec.Cmd {
+  return w.command("/bundle.sh", args...)
+}
+
+func (w *DeployWorkspace) command(cmd string, args ...string) *exec.Cmd {
+  c := exec.Command(cmd, args...)
+  c.Dir = w.Workspace.Path
+  c.Env = os.Environ()
+  c.Stdout = os.Stdout
+  c.Stderr = os.Stderr
+  return c
 }
