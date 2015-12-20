@@ -40,7 +40,7 @@ func main() {
 	plugin.Param("vargs", &vargs)
 	plugin.MustParse()
 
-	fmt.Printf("Installing your deploy key to %s\n", sshKeyPath)
+	log("Installing your deploy key to %s", sshKeyPath)
 	os.MkdirAll(sshKeyPath, 0700)
 	ioutil.WriteFile(sshPrivateKeyPath, []byte(workspace.Keys.Private), 0600)
 	ioutil.WriteFile(sshPublicKeyPath, []byte(workspace.Keys.Public), 0644)
@@ -56,7 +56,7 @@ func main() {
 		return
 	}
 
-  fmt.Printf("Running Bundler\n")
+  log("Running Bundler")
   bundle := dw.bundle("install")
   if err := bundle.Run(); err != nil {
     fmt.Println(err)
@@ -64,7 +64,7 @@ func main() {
     return
   }
 
-  fmt.Printf("Running Capistrano\n")
+  log("Running Capistrano")
   capistrano := dw.cap(tasks...)
 	if err := capistrano.Run(); err != nil {
 		fmt.Println(err)
