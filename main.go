@@ -64,6 +64,7 @@ func main() {
     return
   }
 
+  fmt.Printf("Running Capistrano\n")
   capistrano := dw.cap(tasks...)
 	if err := capistrano.Run(); err != nil {
 		fmt.Println(err)
