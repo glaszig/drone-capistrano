@@ -56,6 +56,7 @@ func main() {
 		return
 	}
 
+  fmt.Printf("Running Bundler\n")
   bundle := dw.bundle("install")
   if err := bundle.Run(); err != nil {
     fmt.Println(err)
