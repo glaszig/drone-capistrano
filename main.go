@@ -81,7 +81,7 @@ func command(w drone.Workspace, cmd string, args ...string) *exec.Cmd {
 }
 
 func (w *DeployWorkspace) cap(tasks ...string) *exec.Cmd {
-  args := append([]string{"cap"}, tasks...)
+  args := append([]string{"exec", "cap"}, tasks...)
   return w.bundle(args...)
 }
 
