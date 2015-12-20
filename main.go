@@ -57,7 +57,11 @@ func main() {
 	}
 
   log("Running Bundler")
-  bundle := dw.bundle("install")
+  bundle_args := []string{"install", "--quiet"}
+  if len(vargs.BundlePath) > 0 {
+    bundle_args = append(bundle_args, []string{"--path", vargs.BundlePath})
+  }
+  bundle := dw.bundle(bundle_args...)
   if err := bundle.Run(); err != nil {
     fmt.Println(err)
     os.Exit(1)
