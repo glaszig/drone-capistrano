@@ -1,3 +1,4 @@
+<img src="logo.svg" width="80" height="80" align="right">
 Use this plugin for deployment via [Capistrano](http://capistranorb.com/).
 The only requiree configuration option defines the Capistrano tasks to run.
 Option `bundle_path` allows you to specify the path where Bundler should
