@@ -90,3 +90,7 @@ func (w *DeployWorkspace) command(cmd string, args ...string) *exec.Cmd {
   c.Stderr = os.Stderr
   return c
 }
+
+func log(message string, a ...interface{}) {
+  fmt.Printf("=> %s\n", fmt.Sprintf(message, a...))
+}
