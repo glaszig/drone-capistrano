@@ -18,6 +18,5 @@ RUN apk update && \
   rm -rf /var/cache/apk/*
 
 ADD bundle.sh /
-ADD ssh_config /etc/ssh/
 ADD drone-capistrano /bin/
 ENTRYPOINT ["/bin/drone-capistrano"]

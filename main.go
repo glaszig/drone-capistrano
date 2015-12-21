@@ -2,22 +2,20 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
-	"path"
+	"os/user"
+	"path/filepath"
 	"strings"
 
+	"github.com/drone-plugins/drone-git-push/repo"
 	"github.com/drone/drone-go/drone"
 	"github.com/drone/drone-go/plugin"
 )
 
 var (
-	build             string
-	buildDate         string
-	sshKeyPath        string = "/root/.ssh"
-	sshPrivateKeyPath string = path.Join(sshKeyPath, "id_rsa")
-	sshPublicKeyPath  string = path.Join(sshKeyPath, "id_rsa.pub")
+	build     string
+	buildDate string
 )
 
 type DeployWorkspace struct {
@@ -28,25 +26,22 @@ func main() {
 	fmt.Printf("Drone Capistrano Plugin built at %s\n", buildDate)
 
 	workspace := drone.Workspace{}
-	repo := drone.Repo{}
-	build := drone.Build{}
 	vargs := Params{}
 
 	dw := DeployWorkspace{workspace}
 
 	plugin.Param("workspace", &workspace)
-	plugin.Param("repo", &repo)
-	plugin.Param("build", &build)
 	plugin.Param("vargs", &vargs)
 	plugin.MustParse()
 
-	log("Installing your deploy key to %s", sshKeyPath)
-	os.MkdirAll(sshKeyPath, 0700)
-	ioutil.WriteFile(sshPrivateKeyPath, []byte(workspace.Keys.Private), 0600)
-	ioutil.WriteFile(sshPublicKeyPath, []byte(workspace.Keys.Public), 0644)
+	log("Installing Drone's ssh key")
+	if err := repo.WriteKey(&workspace); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 
 	os.Setenv("BUILD_PATH", workspace.Path)
-	os.Setenv("GIT_SSH_KEY", sshPrivateKeyPath)
+	os.Setenv("GIT_SSH_KEY", sshPrivateKeyPath())
 
 	tasks := strings.Fields(vargs.Tasks)
 
@@ -93,6 +88,14 @@ func (w *DeployWorkspace) command(cmd string, args ...string) *exec.Cmd {
 	c.Stdout = os.Stdout
 	c.Stderr = os.Stderr
 	return c
+}
+
+func sshPrivateKeyPath() string {
+	home := "/root"
+	if currentUser, err := user.Current(); err == nil {
+		home = currentUser.HomeDir
+	}
+	return filepath.Join(home, ".ssh", "id_rsa")
 }
 
 func log(message string, a ...interface{}) {
