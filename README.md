@@ -39,7 +39,6 @@ Build the Docker container using `make`:
 
 ```sh
 make deps build docker
-docker build --rm=true -t glaszig/drone-capistrano .
 ```
 
 ### Example

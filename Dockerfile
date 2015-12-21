@@ -2,7 +2,6 @@
 #
 #     cd $GOPATH/src/github.com/drone-plugins/drone-capistrano
 #     make deps build docker
-#     docker build --rm=true -t plugins/drone-capistrano .
 
 FROM alpine:3.2
 
