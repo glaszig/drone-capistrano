@@ -1,7 +1,9 @@
 Use this plugin for deployment via [Capistrano](http://capistranorb.com/).
-The only requiree configuration option defines the Capistrano tasks to run.
-Option `bundle_path` allows you to specify the path where Bundler should
-install Gems.
+The following parameters are required:
+
+- `tasks` - The Capistrano tasks to run, e.g. `production deploy`
+- `bundle_path` - Path where Bundler should install gems. You probably want
+this to point to your drone cache path.
 
 ## Example
 
