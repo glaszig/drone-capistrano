@@ -1,7 +1,7 @@
 # drone-capistrano
 
-[![Build Status](https://travis-ci.org/glaszig/drone-capistrano.svg?branch=master)](https://travis-ci.org/glaszig/drone-capistrano)
-[![ImageLayers Size](https://img.shields.io/imagelayers/image-size/glaszig/drone-capistrano/latest.svg)](https://hub.docker.com/r/glaszig/drone-capistrano/)
+[![Build Status](http://beta.drone.io/api/badges/drone-plugins/drone-capistrano/status.svg)](http://beta.drone.io/drone-plugins/drone-capistrano)
+[![](https://badge.imagelayers.io/plugins/drone-capistrano:latest.svg)](https://imagelayers.io/?images=plugins/drone-capistrano:latest 'Get your own badge on imagelayers.io')
 
 Drone plugin for deployment via Capistrano.
 
@@ -11,7 +11,7 @@ Drone plugin for deployment via Capistrano.
 ./drone-capistrano <<EOF
 {
     "repo": {
-        "clone_url": "git://github.com/glaszig/drone-capistrano",
+        "clone_url": "git://github.com/drone-plugins/drone-capistrano",
         "full_name": "drone/drone",
         "owner": "drone",
         "name": "drone"
@@ -24,7 +24,7 @@ Drone plugin for deployment via Capistrano.
     },
     "workspace": {
         "root": "/drone/src",
-        "path": "/home/glaszig/golang/src/github.com/glaszig/drone-capistrano"
+        "path": "/home/user/golang/src/github.com/drone-plugins/drone-capistrano"
     },
     "vargs": {
         "tasks": "production deploy"
@@ -44,10 +44,10 @@ make deps build docker
 ### Example
 
 ```sh
-docker run -i glaszig/drone-capistrano <<EOF
+docker run -i plugins/drone-capistrano <<EOF
 {
     "repo": {
-        "clone_url": "git://github.com/glaszig/drone-capistrano",
+        "clone_url": "git://github.com/drone-plugins/drone-capistrano",
         "full_name": "drone/drone",
         "owner": "drone",
         "name": "drone"
@@ -60,7 +60,7 @@ docker run -i glaszig/drone-capistrano <<EOF
     },
     "workspace": {
         "root": "/drone/src",
-        "path": "/home/glaszig/golang/src/github.com/glaszig/drone-capistrano"
+        "path": "/home/user/golang/src/github.com/drone-plugins/drone-capistrano"
     },
     "vargs": {
         "tasks": "production deploy"
