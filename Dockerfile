@@ -13,8 +13,9 @@ RUN apk update && \
     openssh \
     ruby \
     ruby-dev && \
-  gem install --no-ri --no-rdoc bundler && \
-  gem install --no-ri --no-rdoc capistrano && \
+  gem install --no-ri --no-rdoc \
+  bundler \
+  capistrano && \
   rm -rf /var/cache/apk/*
 
 ADD bundle.sh /
