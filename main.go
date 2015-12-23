@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"os/user"
-	"path/filepath"
 	"strings"
 
 	"github.com/drone-plugins/drone-git-push/repo"
@@ -14,8 +12,9 @@ import (
 )
 
 var (
-	build     string
-	buildDate string
+	build          string
+	buildDate      string
+	privateKeyPath string = "/root/.ssh/id_rsa"
 )
 
 type DeployWorkspace struct {
@@ -41,7 +40,7 @@ func main() {
 	}
 
 	os.Setenv("BUILD_PATH", workspace.Path)
-	os.Setenv("GIT_SSH_KEY", sshPrivateKeyPath())
+	os.Setenv("GIT_SSH_KEY", privateKeyPath)
 
 	tasks := strings.Fields(vargs.Tasks)
 
@@ -88,14 +87,6 @@ func (w *DeployWorkspace) command(cmd string, args ...string) *exec.Cmd {
 	c.Stdout = os.Stdout
 	c.Stderr = os.Stderr
 	return c
-}
-
-func sshPrivateKeyPath() string {
-	home := "/root"
-	if currentUser, err := user.Current(); err == nil {
-		home = currentUser.HomeDir
-	}
-	return filepath.Join(home, ".ssh", "id_rsa")
 }
 
 func log(message string, a ...interface{}) {
