@@ -51,7 +51,10 @@ func main() {
 	}
 
 	log("Running Bundler")
-	bundle_args := []string{"install", "--quiet"}
+	bundle_args := []string{"install"}
+	if len(vargs.Debug) == 0 {
+		bundle_args = append(bundle_args, "--quiet")
+	}
 	if len(vargs.BundlePath) > 0 {
 		bundle_args = append(bundle_args, "--path", vargs.BundlePath)
 	}
