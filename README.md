@@ -1,5 +1,9 @@
 # drone-capistrano
 
+Development branch: 
+[![Build Status](https://travis-ci.org/glaszig/drone-capistrano.svg?branch=dev)](https://travis-ci.org/glaszig/drone-capistrano)
+[![ImageLayers](https://badge.imagelayers.io/glaszig/drone-capistrano:latest.svg)](https://imagelayers.io/?images=glaszig/drone-capistrano:latest 'Get your own badge on imagelayers.io')
+
 [![Build Status](http://beta.drone.io/api/badges/drone-plugins/drone-capistrano/status.svg)](http://beta.drone.io/drone-plugins/drone-capistrano)
 [![](https://badge.imagelayers.io/plugins/drone-capistrano:latest.svg)](https://imagelayers.io/?images=plugins/drone-capistrano:latest 'Get your own badge on imagelayers.io')
 
