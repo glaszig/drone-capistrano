@@ -51,14 +51,7 @@ func main() {
 	}
 
 	log("Running Bundler")
-	bundle_args := []string{"install"}
-	if ! vargs.Debug {
-		bundle_args = append(bundle_args, "--quiet")
-	}
-	if len(vargs.BundlePath) > 0 {
-		bundle_args = append(bundle_args, "--path", vargs.BundlePath)
-	}
-	bundle := dw.bundle(bundle_args...)
+	bundle := dw.bundle(bundlerArgs(vargs)...)
 	if err := bundle.Run(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -72,6 +65,17 @@ func main() {
 		os.Exit(1)
 		return
 	}
+}
+
+func bundlerArgs(vargs Params) []string {
+	args := []string{"install"}
+	if ! vargs.Debug {
+		args = append(args, "--quiet")
+	}
+	if len(vargs.BundlePath) > 0 {
+		args = append(args, "--path", vargs.BundlePath)
+	}
+	return args
 }
 
 func (w *DeployWorkspace) cap(tasks ...string) *exec.Cmd {
