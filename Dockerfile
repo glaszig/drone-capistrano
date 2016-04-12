@@ -5,7 +5,10 @@
 
 FROM ruby:2.3-alpine
 
-RUN gem install capistrano
+RUN apk update \
+  && apk add ca-certificates git openssh \
+  && gem install capistrano \
+  && rm -rf /var/cache/apk/*
 
 ADD bundle.sh /
 ADD drone-capistrano /bin/
