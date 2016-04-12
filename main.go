@@ -42,6 +42,11 @@ func main() {
 	os.Setenv("BUILD_PATH", workspace.Path)
 	os.Setenv("GIT_SSH_KEY", privateKeyPath)
 
+	if vargs.Debug {
+		bundleAppConfig := os.Getenv("BUNDLE_APP_CONFIG")
+		fmt.Printf("BUNDLE_APP_CONFIG: %s\n", bundleAppConfig)
+	}
+
 	tasks := strings.Fields(vargs.Tasks)
 
 	if len(tasks) == 0 {
