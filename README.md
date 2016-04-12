@@ -1,74 +1,35 @@
-# drone-capistrano
+# Drone Capistrano Plugin [![Build Status](https://travis-ci.org/glaszig/drone-capistrano.svg?branch=master)](https://travis-ci.org/glaszig/drone-capistrano) [![ImageLayers](https://badge.imagelayers.io/glaszig/drone-capistrano:latest.svg)](https://imagelayers.io/?images=glaszig/drone-capistrano:latest 'Get your own badge on imagelayers.io')
 
-Development branch: 
-[![Build Status](https://travis-ci.org/glaszig/drone-capistrano.svg?branch=dev)](https://travis-ci.org/glaszig/drone-capistrano)
-[![ImageLayers](https://badge.imagelayers.io/glaszig/drone-capistrano:latest.svg)](https://imagelayers.io/?images=glaszig/drone-capistrano:latest 'Get your own badge on imagelayers.io')
-
-[![Build Status](http://beta.drone.io/api/badges/drone-plugins/drone-capistrano/status.svg)](http://beta.drone.io/drone-plugins/drone-capistrano)
-[![](https://badge.imagelayers.io/plugins/drone-capistrano:latest.svg)](https://imagelayers.io/?images=plugins/drone-capistrano:latest 'Get your own badge on imagelayers.io')
-
-Drone plugin for deployment via Capistrano.
+This is the Capistrano plugin for the Drone continuous integration platform.
 
 ## Usage
 
-```sh
-./drone-capistrano <<EOF
-{
-    "repo": {
-        "clone_url": "git://github.com/drone-plugins/drone-capistrano",
-        "full_name": "drone/drone",
-        "owner": "drone",
-        "name": "drone"
-    },
-    "build": {
-        "event": "push",
-        "branch": "master",
-        "commit": "436b7a6e2abaddfd35740527353e78a227ddcb2c",
-        "ref": "refs/heads/master"
-    },
-    "workspace": {
-        "root": "/drone/src",
-        "path": "/home/user/golang/src/github.com/drone-plugins/drone-capistrano"
-    },
-    "vargs": {
-        "tasks": "production deploy"
-    }
-}
-EOF
+Configure your `drone.yml` like so.
+
+```yaml
+build:
+  environment:
+    BUNDLE_APP_CONFIG=.bundle
+  commands:
+    - bundle install --path vendor/bundle
+
+deploy:
+  capistrano:
+    tasks: production deploy
+    when:
+      branch: master
 ```
 
-## Docker
+Use this plugin for deployment via [Capistrano](http://capistranorb.com/).
 
-Build the Docker container using `make`:
+The Docker image is based on the official `ruby:2.3-alpine` and should only
+be used if your project is building on Ruby 2.3.
 
-```sh
-make deps build docker
-```
+To have the Capistrano plugin properly pickup your gems make sure your Bundler
+installs gems into the build path by setting a proper `BUNDLE_APP_PATH` env var
+and running bundler with the `--path` option.
+(see example above).
 
-### Example
+The following parameters are required:
 
-```sh
-docker run -i plugins/drone-capistrano <<EOF
-{
-    "repo": {
-        "clone_url": "git://github.com/drone-plugins/drone-capistrano",
-        "full_name": "drone/drone",
-        "owner": "drone",
-        "name": "drone"
-    },
-    "build": {
-        "event": "push",
-        "branch": "master",
-        "commit": "436b7a6e2abaddfd35740527353e78a227ddcb2c",
-        "ref": "refs/heads/master"
-    },
-    "workspace": {
-        "root": "/drone/src",
-        "path": "/home/user/golang/src/github.com/drone-plugins/drone-capistrano"
-    },
-    "vargs": {
-        "tasks": "production deploy"
-    }
-}
-EOF
-```
+- `tasks` - The Capistrano tasks to run, e.g. `production deploy`
