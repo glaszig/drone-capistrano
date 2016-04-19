@@ -15,6 +15,7 @@ build:
 
 deploy:
   capistrano:
+    image: glaszig/drone-capistrano
     tasks: production deploy
     when:
       branch: master
