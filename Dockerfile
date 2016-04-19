@@ -10,6 +10,8 @@ RUN apk update \
   && gem install capistrano \
   && rm -rf /var/cache/apk/*
 
+ENV BUNDLE_APP_CONFIG .bundle
+
 ADD bundle.sh /
 ADD drone-capistrano /bin/
 ENTRYPOINT ["/bin/drone-capistrano"]
