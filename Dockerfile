@@ -12,6 +12,6 @@ RUN apk update \
 
 ENV BUNDLE_APP_CONFIG .bundle
 
-ADD bundle.sh /
+# ADD bundle.sh /
 ADD drone-capistrano /bin/
 ENTRYPOINT ["/bin/drone-capistrano"]
