@@ -17,6 +17,9 @@ type (
 
 // Exec executes the plugin step
 func (p Plugin) Exec() error {
+  fmt.Println("PATH:", os.Getenv("PATH"))
+  fmt.Println("GIT_SSH_KEY:", os.Getenv("GIT_SSH_KEY"))
+
   dw := DeployWorkspace{}
   tasks := strings.Fields(p.Tasks)
 
@@ -57,7 +60,7 @@ func (w *DeployWorkspace) cap(tasks ...string) *exec.Cmd {
 
 func (w *DeployWorkspace) bundle(args ...string) *exec.Cmd {
   // return w.command("/bundle.sh", args...)
-  return w.command("bundle", args...)
+  return w.command("/usr/local/bundle/bin/bundle", args...)
 }
 
 func (w *DeployWorkspace) command(cmd string, args ...string) *exec.Cmd {
