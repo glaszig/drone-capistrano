@@ -25,7 +25,12 @@ type (
 
 // Exec executes the plugin step
 func (p Plugin) Exec() error {
-	writeSshKey(p.Config)
+	var err error = nil
+
+	err = writeSshKey(p.Config)
+	if err != nil {
+		return err
+	}
 
 	dw := DeployWorkspace{}
 	tasks := strings.Fields(p.Config.Tasks)
@@ -86,6 +91,11 @@ func writeSshKey(c Config) error {
 	private_key_bytes, err = base64.StdEncoding.DecodeString(c.PrivateKey)
 	if err != nil {
 		return fmt.Errorf("Failed decoding private key: %s", err)
+	}
+
+	err = os.Mkdir("/root/.ssh", 0755)
+	if err != nil {
+		return fmt.Errorf("Failed creating /root/.ssh: %s", err)
 	}
 
 	err = ioutil.WriteFile("/root/.ssh/capistrano", private_key_bytes, 0600)
