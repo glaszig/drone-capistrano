@@ -93,10 +93,7 @@ func writeSshKey(c Config) error {
 		return fmt.Errorf("Failed decoding private key: %s", err)
 	}
 
-	err = os.Mkdir("/root/.ssh", 0755)
-	if err != nil {
-		return fmt.Errorf("Failed creating /root/.ssh: %s", err)
-	}
+	_ = os.MkdirAll("/root/.ssh", 0755)
 
 	err = ioutil.WriteFile("/root/.ssh/capistrano", private_key_bytes, 0600)
 	if err != nil {
