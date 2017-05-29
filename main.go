@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"log"
+	"os"
 
 	"github.com/urfave/cli"
 )
@@ -42,9 +42,9 @@ func main() {
 func run(c *cli.Context) error {
 	plugin := Plugin{
 		Config: Config{
-			Tasks: c.String("tasks"),
+			Tasks:      c.String("tasks"),
 			PrivateKey: c.String("private_key"),
-			PublicKey: c.String("public_key"),
+			PublicKey:  c.String("public_key"),
 		},
 	}
 	return plugin.Exec()
