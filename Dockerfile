@@ -9,6 +9,6 @@ RUN apk add --update build-base ca-certificates git openssh \
   && gem install bundler \
   && rm -rf /var/cache/apk/*
 
-# ADD bundle.sh /
+ADD bundle.sh /
 ADD drone-capistrano /bin/
 ENTRYPOINT ["/bin/drone-capistrano"]
