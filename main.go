@@ -22,6 +22,16 @@ func main() {
 			Usage:  "capistrano tasks to run",
 			EnvVar: "PLUGIN_TASKS",
 		},
+		cli.StringFlag{
+			Name:   "private_key",
+			Usage:  "SSH private key",
+			EnvVar: "CAPISTRANO_PRIVATE_KEY",
+		},
+		cli.StringFlag{
+			Name:   "public_key",
+			Usage:  "SSH public key",
+			EnvVar: "CAPISTRANO_PUBLIC_KEY",
+		},
 	}
 
 	if err := app.Run(os.Args); err != nil {
@@ -30,6 +40,12 @@ func main() {
 }
 
 func run(c *cli.Context) error {
-	plugin := Plugin{Tasks: c.String("tasks")}
+	plugin := Plugin{
+		Config: Config{
+			Tasks: c.String("tasks"),
+			PrivateKey: c.String("private_key"),
+			PublicKey: c.String("public_key"),
+		},
+	}
 	return plugin.Exec()
 }

@@ -5,23 +5,30 @@ import (
   "os"
   "os/exec"
   "strings"
+  "encoding/base64"
+  "ioutil"
 )
 
 type (
-  // Plugin defines the Docker plugin parameters.
-  Plugin struct {
+  Config struct {
     Tasks string
+    PrivateKey string
+    PublicKey string
   }
+
+  Plugin struct {
+    Config Config
+  }
+
   DeployWorkspace struct{}
 )
 
 // Exec executes the plugin step
 func (p Plugin) Exec() error {
-  fmt.Println("PATH:", os.Getenv("PATH"))
-  fmt.Println("GIT_SSH_KEY:", os.Getenv("GIT_SSH_KEY"))
+  writeSshKey(p.Config)
 
   dw := DeployWorkspace{}
-  tasks := strings.Fields(p.Tasks)
+  tasks := strings.Fields(p.Config.Tasks)
 
   if len(tasks) == 0 {
     return fmt.Errorf("Please provide Capistrano tasks to execute")
@@ -59,8 +66,7 @@ func (w *DeployWorkspace) cap(tasks ...string) *exec.Cmd {
 }
 
 func (w *DeployWorkspace) bundle(args ...string) *exec.Cmd {
-  // return w.command("/bundle.sh", args...)
-  return w.command("/usr/local/bundle/bin/bundle", args...)
+  return w.command("/bundle.sh", args...)
 }
 
 func (w *DeployWorkspace) command(cmd string, args ...string) *exec.Cmd {
@@ -70,6 +76,30 @@ func (w *DeployWorkspace) command(cmd string, args ...string) *exec.Cmd {
   c.Stdout = os.Stdout
   c.Stderr = os.Stderr
   return c
+}
+
+func writeSshKey(c Config) error {
+  private_key_bytes, err := base64.StdEncoding.DecodeString(c.PrivateKey)
+  if err != nil {
+    return fmt.Errorf("Failed decoding private key: %s", err)
+  }
+
+  err := ioutil.WriteFile("/root/.ssh/capistrano", private_key_bytes, 0600)
+  if err != nil {
+    return fmt.Errorf("Failed writing private key: %s", err)
+  }
+
+  public_key_bytes, err := base64.StdEncoding.DecodeString(c.PublicKey)
+  if err != nil {
+    return fmt.Errorf("Failed decoding public key: %s", err)
+  }
+
+  err := ioutil.WriteFile("/root/.ssh/capistrano.pub", public_key_bytes, 0644)
+  if err != nil {
+    return fmt.Errorf("Failed writing public key: %s", err)
+  }
+
+  return nil
 }
 
 func printLog(message string, a ...interface{}) {
