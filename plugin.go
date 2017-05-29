@@ -6,7 +6,7 @@ import (
   "os/exec"
   "strings"
   "encoding/base64"
-  "ioutil"
+  "io/ioutil"
 )
 
 type (
@@ -79,22 +79,26 @@ func (w *DeployWorkspace) command(cmd string, args ...string) *exec.Cmd {
 }
 
 func writeSshKey(c Config) error {
-  private_key_bytes, err := base64.StdEncoding.DecodeString(c.PrivateKey)
+  var err error = nil
+  var private_key_bytes []byte = nil
+  var public_key_bytes []byte = nil
+
+  private_key_bytes, err = base64.StdEncoding.DecodeString(c.PrivateKey)
   if err != nil {
     return fmt.Errorf("Failed decoding private key: %s", err)
   }
 
-  err := ioutil.WriteFile("/root/.ssh/capistrano", private_key_bytes, 0600)
+  err = ioutil.WriteFile("/root/.ssh/capistrano", private_key_bytes, 0600)
   if err != nil {
     return fmt.Errorf("Failed writing private key: %s", err)
   }
 
-  public_key_bytes, err := base64.StdEncoding.DecodeString(c.PublicKey)
+  public_key_bytes, err = base64.StdEncoding.DecodeString(c.PublicKey)
   if err != nil {
     return fmt.Errorf("Failed decoding public key: %s", err)
   }
 
-  err := ioutil.WriteFile("/root/.ssh/capistrano.pub", public_key_bytes, 0644)
+  err = ioutil.WriteFile("/root/.ssh/capistrano.pub", public_key_bytes, 0644)
   if err != nil {
     return fmt.Errorf("Failed writing public key: %s", err)
   }
