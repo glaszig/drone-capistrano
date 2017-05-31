@@ -18,8 +18,6 @@ type (
 	Plugin struct {
 		Config Config
 	}
-
-	DeployWorkspace struct{}
 )
 
 // Exec executes the plugin step
@@ -31,7 +29,6 @@ func (p Plugin) Exec() error {
 		return err
 	}
 
-	dw := DeployWorkspace{}
 	tasks := strings.Fields(p.Config.Tasks)
 
 	if len(tasks) == 0 {
@@ -39,13 +36,13 @@ func (p Plugin) Exec() error {
 	}
 
 	printLog("Running Bundler")
-	bundle := dw.bundle(bundlerArgs()...)
+	bundle := bundle("install")
 	if err := bundle.Run(); err != nil {
 		return fmt.Errorf("Bundler failed. %s", err)
 	}
 
 	printLog("Running Capistrano")
-	capistrano := dw.cap(tasks...)
+	capistrano := capistrano(tasks...)
 	if err := capistrano.Run(); err != nil {
 		return fmt.Errorf("Capistrano failed. %s", err)
 	}
@@ -53,27 +50,16 @@ func (p Plugin) Exec() error {
 	return nil
 }
 
-func bundlerArgs() []string {
-	args := []string{"install"}
-	// if ! vargs.Debug {
-	//   args = append(args, "--quiet")
-	// }
-	// if len(vargs.BundlePath) > 0 {
-	//   args = append(args, "--path", vargs.BundlePath)
-	// }
-	return args
-}
-
-func (w *DeployWorkspace) cap(tasks ...string) *exec.Cmd {
+func capistrano(tasks ...string) *exec.Cmd {
 	args := append([]string{"exec", "cap"}, tasks...)
-	return w.bundle(args...)
+	return bundle(args...)
 }
 
-func (w *DeployWorkspace) bundle(args ...string) *exec.Cmd {
-	return w.command("/bundle.sh", args...)
+func bundle(args ...string) *exec.Cmd {
+	return shellCommand("/bundle.sh", args...)
 }
 
-func (w *DeployWorkspace) command(cmd string, args ...string) *exec.Cmd {
+func shellCommand(cmd string, args ...string) *exec.Cmd {
 	c := exec.Command(cmd, args...)
 	// c.Dir = w.Workspace.Path
 	c.Env = os.Environ()
