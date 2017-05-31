@@ -1,4 +1,4 @@
-Use this plugin to deploy applications with capistrano. 
+Use this plugin to deploy applications with capistrano.
 
 ## Config
 
@@ -19,7 +19,13 @@ it is not exposed to users. This can be done using the drone-cli.
 ```bash
 drone secret add \
   --name capistrano_private_key \
-  --value "$(base64 -i ~/.ssh/jamii-drone-deploy)" \
+  --value @$HOME/.ssh/drone-deploy \
+  --image glaszig/drone-capistrano
+  --repository octocat/hello-world
+
+drone secret add \
+  --name capistrano_public_key \
+  --value @$HOME/.ssh/drone-deploy.pub \
   --image glaszig/drone-capistrano
   --repository octocat/hello-world
 ```

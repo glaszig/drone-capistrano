@@ -1,36 +1,54 @@
-# Drone Capistrano Plugin [![Build Status](https://travis-ci.org/glaszig/drone-capistrano.svg?branch=master)](https://travis-ci.org/glaszig/drone-capistrano) [![ImageLayers](https://badge.imagelayers.io/glaszig/drone-capistrano:latest.svg)](https://imagelayers.io/?images=glaszig/drone-capistrano:latest 'Get your own badge on imagelayers.io')
+# Drone Capistrano Plugin [![Build Status](https://travis-ci.org/glaszig/drone-capistrano.svg?branch=master)](https://travis-ci.org/glaszig/drone-capistrano)
 
 This is the Capistrano plugin for the Drone continuous integration platform.
+Use this plugin to deploy applications with Capistrano.
 
-## Usage
+## Config
 
-Configure your `drone.yml` like so.
+The following parameters are used to configure the plugin:
 
-```yaml
-build:
-  environment:
-    BUNDLE_APP_CONFIG=.bundle
-  commands:
-    - bundle install --path vendor/bundle
+* **capistrano_private_key** - Private SSH deploy key
+* **capistrano_public_key** - Public SSH deploy key
+* **tasks** - The Capistrano tasks to run
 
-deploy:
-  capistrano:
-    image: glaszig/drone-capistrano
-    tasks: production deploy
-    when:
-      branch: master
+The following secret values can be set to configure the plugin.
+
+* **CAPISTRANO_PRIVATE_KEY** - corresponds to **capistrano_private_key**
+* **CAPISTRANO_PUBLIC_KEY** - corresponds to **capistrano_public_key**
+
+It is highly recommended to put **CAPISTRANO_PRIVATE_KEY** into a secret so
+it is not exposed to users. This can be done using the drone-cli.
+
+```bash
+drone secret add \
+  --name capistrano_private_key \
+  --value @$HOME/.ssh/drone-deploy \
+  --image glaszig/drone-capistrano
+  --repository octocat/hello-world
+
+drone secret add \
+  --name capistrano_public_key \
+  --value @$HOME/.ssh/drone-deploy.pub \
+  --image glaszig/drone-capistrano
+  --repository octocat/hello-world
 ```
 
-Use this plugin for deployment via [Capistrano](http://capistranorb.com/).
+See [secrets](http://docs.drone.io/manage-secrets/) for additional
+information on secrets
 
-The Docker image is based on the official `ruby:2.3-alpine` and should only
-be used if your project is building on Ruby 2.3.
+## Examples
 
-To have the Capistrano plugin properly pickup your gems make sure your Bundler
-installs gems into the build path by setting a proper `BUNDLE_APP_PATH` env var
-and running bundler with the `--path` option.
-(see example above).
+The following is a sample configuration in your .drone.yml file:
 
-The following parameters are required:
-
-- `tasks` - The Capistrano tasks to run, e.g. `production deploy`
+```yaml
+pipeline:
+  deploy:
+    image: glaszig/drone-capistrano
+    repo: octocat/hello-world
+    tasks: production deploy
+    secrets:
+      - capistrano_private_key
+      - capistrano_public_key
+    when:
+      event: push
+```
