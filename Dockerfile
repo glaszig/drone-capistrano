@@ -3,7 +3,7 @@
 #     cd $GOPATH/src/github.com/drone-plugins/drone-capistrano
 #     make deps build docker
 
-FROM ruby:2.3-alpine
+FROM ruby:2.4-alpine
 
 ENV BUILD_PACKAGES="curl-dev build-base ca-certificates git openssh" \
     DEV_PACKAGES="zlib-dev libxml2-dev libxslt-dev tzdata yaml-dev sqlite-dev postgresql-dev mariadb-dev"
