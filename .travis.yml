@@ -6,15 +6,21 @@ go:
   - 1.5
 install:
   - docker login --email=$DOCKER_HUB_EMAIL --username=$DOCKER_HUB_USERNAME --password=$DOCKER_HUB_PASSWORD
+before_script:
+  - dockerfile=Dockerfile
+  - dockertag="$VERSION"
+  - true && [ "latest" == "$VERSION" ] || dockerfile="Dockerfile-${VERSION}"
+  - true && [ "master" == "$TRAVIS_BRANCH" ] || dockertag="${TRAVIS_BRANCH}-${VERSION}"
 script:
   - make deps
   - make build
   - make test
-  - docker build -t $DOCKER_IMAGE_NAME .
-  - docker tag $DOCKER_IMAGE_NAME $DOCKER_IMAGE_NAME:$TRAVIS_BRANCH
-  - if [ ! -z "$TRAVIS_TAG" ]; then docker tag $DOCKER_IMAGE_NAME:latest $DOCKER_IMAGE_NAME:$TRAVIS_TAG; fi
-  - if [ "master" == "$TRAVIS_BRANCH" ]; then docker push $DOCKER_IMAGE_NAME:latest; else docker push $DOCKER_IMAGE_NAME:$TRAVIS_BRANCH; fi
+  - docker build -t $DOCKER_IMAGE_NAME:$dockertag -f $dockerfile .
+  - docker push $DOCKER_IMAGE_NAME:$dockertag
 env:
   global:
     - secure: d1asbLmWWqIXrp7dBg93ktOVm6Wn6WXOztCLQYRyYD5+jKjCfDuqj1QofwYJRq0m0z2e8EFm7ekSHQ9GAzDct0rmCFmYmRblI5FOzRAKH01jsutwS8RNJ5doWV07lIsAxOHciwo1vNiDMdEVjqpSEgUEq2ix6IKSZe+mjuP3OWJXjUgAfA30XNC3D7LDrhAKiC86ZHB/s4tA9somneXgmh0f6vm/447uGsw6KT4qdH/Jhtj2S9hwmjdgXb1T5Mp5jMyoZzWGhM/FMyHgyKvlsWxqs5QtfmIURez95eUisr02awysB85BwZWoLs3x79bz25MYiASyE885fwP6393VheXKkAByBwu57eHejoi/WI28TrGMeJ93xxGRUDRrXQfLjqItH+QX6TlT/3ELr58DvGC1R97g9slriQzvJl/VqXZRk6+DyRu3qixV5i1DOBn9uSU+FEt5kcj2kULsfGvsgLSx2P/Ycxvsb4WUvo26CoD1WffagKtEhNotFXHZNoDNvDNWu/eSN5i6v/lF1bPR6dYP5pzIggFTGPdEbWfJvQFzm0bxhGFC29j5zNVfK7JukGWLDgAl4PrJT1mqGBbMql6dGwf/XcDv1T0Z7UnIjrXD1aMFKPZjbUGq5n9KnEE7p4aFP9xUaUsGTK+lphumrLGgTi2IzbbEQtZTA4v64lk=
     - DOCKER_IMAGE_NAME=glaszig/drone-capistrano
+  matrix:
+    - VERSION=latest
+    - VERSION=2.3
