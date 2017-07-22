@@ -22,4 +22,4 @@ build:
 	go build -ldflags '-s -w $(LDFLAGS)'
 
 docker:
-	docker build --rm=true -t plugins/drone-capistrano .
+	docker build --rm=true -t glaszig/drone-capistrano .
