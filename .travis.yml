@@ -7,9 +7,8 @@ go:
 install:
   - docker login --email=$DOCKER_HUB_EMAIL --username=$DOCKER_HUB_USERNAME --password=$DOCKER_HUB_PASSWORD
 before_script:
-  - dockerfile=Dockerfile
+  - dockerfile="${VERSION}/Dockerfile"
   - dockertag="$VERSION"
-  - true && [ "latest" == "$VERSION" ] || dockerfile="${VERSION}/Dockerfile"
   - true && [ "master" == "$TRAVIS_BRANCH" ] || dockertag="${TRAVIS_BRANCH}-${VERSION}"
 script:
   - make deps
@@ -24,6 +23,5 @@ env:
     - DOCKER_IMAGE_NAME=glaszig/drone-capistrano
     - CI_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER
   matrix:
-    - VERSION=latest
     - VERSION=2.3
     - VERSION=2.4
