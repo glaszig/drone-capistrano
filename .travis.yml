@@ -9,7 +9,7 @@ install:
 before_script:
   - dockerfile=Dockerfile
   - dockertag="$VERSION"
-  - true && [ "latest" == "$VERSION" ] || dockerfile="Dockerfile-${VERSION}"
+  - true && [ "latest" == "$VERSION" ] || dockerfile="${VERSION}/Dockerfile"
   - true && [ "master" == "$TRAVIS_BRANCH" ] || dockertag="${TRAVIS_BRANCH}-${VERSION}"
 script:
   - make deps
