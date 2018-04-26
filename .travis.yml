@@ -5,7 +5,7 @@ language: go
 go:
   - 1.5
 install:
-  - docker login --email=$DOCKER_HUB_EMAIL --username=$DOCKER_HUB_USERNAME --password=$DOCKER_HUB_PASSWORD
+  - docker login --username=$DOCKER_HUB_USERNAME --password=$DOCKER_HUB_PASSWORD
 before_script:
   - dockerfile="${VERSION}/Dockerfile"
   - dockertag="$VERSION"
