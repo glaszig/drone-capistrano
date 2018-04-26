@@ -10,11 +10,6 @@ ENV BUILD_PACKAGES="curl-dev build-base ca-certificates git openssh" \
 
 RUN \
   apk add --update --upgrade $BUILD_PACKAGES $DEV_PACKAGES && \
-  echo 'gem: --no-document' >> /etc/gemrc && \
-  chmod uog+r /etc/gemrc && \
-  gem install bundler && \
-  bundle config --global build.nokogiri  "--use-system-libraries" && \
-  bundle config --global build.nokogumbo "--use-system-libraries" && \
   find / -type f -iname \*.apk-new -delete && \
   rm -rf /var/cache/apk/* && \
   rm -rf /usr/lib/ruby/gems/*/cache/* && \
