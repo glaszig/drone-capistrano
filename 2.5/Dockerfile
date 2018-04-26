@@ -10,7 +10,6 @@ ENV BUILD_PACKAGES="curl-dev build-base ca-certificates git openssh" \
 
 RUN \
   apk add --update --upgrade $BUILD_PACKAGES $DEV_PACKAGES && \
-  gem install bundler --version "$BUNDLER_VERSION" && \
   find / -type f -iname \*.apk-new -delete && \
   rm -rf /var/cache/apk/* && \
   rm -rf /usr/lib/ruby/gems/*/cache/* && \
