@@ -3,7 +3,7 @@
 export GOOS ?= linux
 export GOARCH ?= amd64
 export CGO_ENABLED ?= 0
-export GO111MODULE ?= on
+export GO111MODULE = on
 
 CI_BUILD_NUMBER ?= 0
 
