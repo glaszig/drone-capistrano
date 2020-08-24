@@ -24,3 +24,6 @@ build:
 
 docker:
 	docker build --rm=true -t glaszig/drone-capistrano .
+
+dockerfile:
+	envsubst '$${RUBY_VERSION}' < Dockerfile.template > Dockerfile
