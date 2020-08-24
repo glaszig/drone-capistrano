@@ -2,8 +2,6 @@ sudo: required
 services:
   - docker
 language: go
-go:
-  - 1.5
 install:
   - docker login --username=$DOCKER_HUB_USERNAME --password=$DOCKER_HUB_PASSWORD
 before_script:
