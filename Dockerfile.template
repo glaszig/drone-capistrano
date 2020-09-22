@@ -5,8 +5,9 @@
 
 FROM ruby:${RUBY_VERSION}-alpine
 
-ENV BUILD_PACKAGES="curl-dev build-base ca-certificates git openssh libc6-compat" \
-    DEV_PACKAGES="zlib-dev libxml2-dev libxslt-dev tzdata yaml-dev sqlite-dev postgresql-dev mariadb-dev"
+ENV BUILD_PACKAGES="curl-dev build-base ca-certificates git openssh libc6-compat python3" \
+    DEV_PACKAGES="zlib-dev libxml2-dev libxslt-dev tzdata yaml-dev sqlite-dev postgresql-dev mariadb-dev" \
+    PYTHONUNBUFFERED=1
 
 RUN \
   apk add --update --upgrade $BUILD_PACKAGES $DEV_PACKAGES && \
