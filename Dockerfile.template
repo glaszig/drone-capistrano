@@ -5,7 +5,7 @@
 
 FROM ruby:${RUBY_VERSION}-alpine
 
-ENV BUILD_PACKAGES="curl-dev build-base ca-certificates git openssh libc6-compat python3" \
+ENV BUILD_PACKAGES="curl-dev build-base ca-certificates git openssh-client libc6-compat python3" \
     DEV_PACKAGES="zlib-dev libxml2-dev libxslt-dev tzdata yaml-dev sqlite-dev postgresql-dev mariadb-dev" \
     PYTHONUNBUFFERED=1
 
