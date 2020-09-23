@@ -11,6 +11,7 @@ ENV BUILD_PACKAGES="curl-dev build-base ca-certificates git openssh-client libc6
 
 RUN \
   apk add --update --upgrade $BUILD_PACKAGES $DEV_PACKAGES && \
+  ln -sf python3 /usr/bin/python && \
   find / -type f -iname \*.apk-new -delete && \
   rm -rf /var/cache/apk/* && \
   rm -rf /usr/lib/ruby/gems/*/cache/* && \
