@@ -4,17 +4,19 @@ services:
 language: go
 install:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-before_script:
-  - dockertag="$RUBY_VERSION"
-  - true && [ "master" == "$TRAVIS_BRANCH" ] || dockertag="${TRAVIS_BRANCH}-${RUBY_VERSION}"
+before_script: |
+  DOCKER_BUILD_OPTS="-t $DOCKER_IMAGE_NAME:$RUBY_VERSION"
+  if [ -n "$RUBY_VERSION_MAJOR" ]; then
+    DOCKER_BUILD_OPTS="$DOCKER_BUILD_OPTS -t $DOCKER_IMAGE_NAME:$RUBY_VERSION_MAJOR"
+  fi
 script:
   - make deps
   - make build
   - make test
   - make dockerfile
-  - echo "* Building $DOCKER_IMAGE_NAME:$dockertag"
-  - docker build -t $DOCKER_IMAGE_NAME:$dockertag .
-  - docker push $DOCKER_IMAGE_NAME:$dockertag
+  - echo "* Building $DOCKER_IMAGE_NAME:$RUBY_VERSION"
+  - docker build $DOCKER_BUILD_OPTS .
+  - docker push -a $DOCKER_IMAGE_NAME
 env:
   global:
     - secure: eigwgtJPj5grH/M4xKwFinh852nUo91mtYwKJzgxn89he6ATTsGlVO6x8jiOFMmJX0+9CBzcggRA2c4/nw720Me5FIv7M7SLvR4gBiVHDU5guDvIb634OwCIDlTtXPiAVeftRpM78JybohkFEEzmKMwX5gA1MYSlFBraydmSX4EtQBojavrur/+ofV6CE1xN6jGO3CBvWJ4ksokDJkklKMI5OWeBJiGACPGaRUX8xNNdl0an9eeQWlC1YMRngsxlrWQQcOtTAF7v55aSEqMFf5iWnFMAWPGS5IHxqD0A+cefDzgboCzof4RDK59Q18MD9i209WNCoi2GYn1imXvHyIwSvh5b7+03MXz+2pYE3p3sRCmOunjQ0m1y2lsRy3BFINyDvmfyuKBp5xU4qw51WkrwnzvjJxNeVXms67rW5ePWxhHJ21a7hm4kMhYs/yy9UPZ8VY6ECw53S8tRRHZT1p4wHytxWmtCSI0P2Dqyb/I2puzC7QqPs65IaO8Ygj30xCMU2sc3cgQ5VfavbtCUdEFLX/bPjiBL0nOMr97AfXSTmZd2Z4c7ebwVzen/F+7YbRzU7BD7zvt7bGt+HMjyrNkFJUT00wOz0Et0urf0KmvCRiQSrPwEvcV6HCZr/YxONNm16lqd2OT3svTqygdKsmVTw04bbD5PcyhUG530qQ8=
@@ -26,4 +28,5 @@ env:
     - RUBY_VERSION=2.4
     - RUBY_VERSION=2.5
     - RUBY_VERSION=2.6
-    - RUBY_VERSION=2.7
+    - RUBY_VERSION=2.7.4
+      RUBY_VERSION_MAJOR=2.7
