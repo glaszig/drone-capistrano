@@ -28,6 +28,8 @@ jobs:
             image_tag: "2.7"
           - ruby_version: "3.0.4"
             image_tag: "3.0"
+          - ruby_version: "3.1.2"
+            image_tag: "3.1"
 
     runs-on: ubuntu-latest
     steps:
