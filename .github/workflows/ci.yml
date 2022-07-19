@@ -24,6 +24,8 @@ jobs:
     strategy:
       matrix:
         include:
+          - ruby_version: "2.7.4"
+            image_tag: "2.7.4"
           - ruby_version: "2.7.6"
             image_tag: "2.7"
           - ruby_version: "3.0.4"
