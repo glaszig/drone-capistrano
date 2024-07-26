@@ -3,20 +3,40 @@
 #     cd $GOPATH/src/github.com/drone-plugins/drone-capistrano
 #     make deps build docker
 
-FROM ruby:${RUBY_VERSION}-alpine
+FROM ruby:${RUBY_VERSION}-slim
 
-ENV BUILD_PACKAGES="curl-dev build-base ca-certificates git openssh-client libc6-compat python3 libc6-compat" \
-    DEV_PACKAGES="zlib-dev libxml2-dev libxslt-dev tzdata yaml-dev sqlite-dev postgresql-dev mariadb-dev" \
+ENV RUBY_VERSION=${RUBY_VERSION} \
     PYTHONUNBUFFERED=1
 
-RUN \
-  apk add --update --upgrade $BUILD_PACKAGES $DEV_PACKAGES && \
-  ln -sf python3 /usr/bin/python && \
-  find / -type f -iname \*.apk-new -delete && \
-  rm -rf /var/cache/apk/* && \
-  rm -rf /usr/lib/ruby/gems/*/cache/* && \
-  rm -rf /usr/local/bundle/cache/* && \
-  rm -rf ~/.gem
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 \
+    openssh-client \
+    git \
+    tzdata \
+    ca-certificates \
+    autoconf \
+    bison \
+    dpkg-dev \
+    libcurl4-openssl-dev \
+    libffi-dev \
+    libgdbm6 \
+    libgdbm-dev \
+    libmariadb-dev \
+    default-libmysqlclient-dev \
+    libncurses5-dev \
+    libpq-dev \
+    libreadline6-dev \
+    libsqlite3-dev \
+    libssl-dev \
+    libxml2-dev \
+    libxslt1-dev \
+    libyaml-dev \
+    zlib1g-dev && \
+    apt-get clean && \
+    rm -rf /var/cache/apt/* && \
+    rm -rf /usr/lib/ruby/gems/*/cache/* && \
+    rm -rf /usr/local/bundle/cache/* && \
+    rm -rf ~/.gem
 
 ADD bundle.sh /
 ADD drone-capistrano /bin/
