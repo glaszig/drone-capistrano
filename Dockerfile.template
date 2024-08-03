@@ -33,6 +33,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libyaml-dev \
     zlib1g-dev && \
     apt-get clean && \
+    update-alternatives --install /usr/bin/python python /usr/bin/python3 1 && \
     rm -rf /var/cache/apt/* && \
     rm -rf /usr/lib/ruby/gems/*/cache/* && \
     rm -rf /usr/local/bundle/cache/* && \
