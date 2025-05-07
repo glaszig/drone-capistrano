@@ -43,6 +43,10 @@ jobs:
             image_tag: "3.3.4"
           - ruby_version: "3.3.4"
             image_tag: "3.3"
+          - ruby_version: "3.4.3"
+            image_tag: "3.4.3"
+          - ruby_version: "3.4.3"
+            image_tag: "3.4"
 
     runs-on: ubuntu-latest
     steps:
