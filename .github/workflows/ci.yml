@@ -52,6 +52,10 @@ jobs:
           - ruby_version: "4.0.0"
             image_tag: "4.0.0"
           - ruby_version: "4.0.1"
+            image_tag: "4.0.1"
+          - ruby_version: "4.0.2"
+            image_tag: "4.0.2"
+          - ruby_version: "4.0.3"
             image_tag: "4.0"
 
     runs-on: ubuntu-latest
