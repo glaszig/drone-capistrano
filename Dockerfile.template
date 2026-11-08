@@ -9,6 +9,8 @@ ENV RUBY_VERSION=${RUBY_VERSION} \
     PYTHONUNBUFFERED=1
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    pkg-config \
     python3 \
     openssh-client \
     git \
